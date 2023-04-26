@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--link th:src="@{/style/app.css}" rel="stylesheet"/-->
+</head>
+<body>
+<h1>People List</h1>
+<div th:if="${not #lists.isEmpty(table)}">
+    <table border="1">
+        <thead><tr><th>Id</th><th>Fname</th><th>Lname</th><th>Email</th></thead>
+        <tbody>
+        <tr th:each="person : ${table}">
+            <td th:text="${person.id}"></td>
+            <td th:text="${person.fname}"></td>
+            <td th:text="${person.lname}"></td>
+            <td th:text="${person.email}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div></body></html>

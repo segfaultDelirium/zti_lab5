@@ -13,6 +13,14 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import javax.sql.DataSource;
 
+import org.thymeleaf.spring6.ISpringTemplateEngine;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+
+
 @EnableWebMvc
 @ComponentScan(basePackages = "zti")
 @Configuration
@@ -41,6 +49,31 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
         dsLookup.setResourceRef(true);
         DataSource dataSource = dsLookup.getDataSource("jdbc/postgres");
         return dataSource;
+    }
+
+    @Bean
+    public ViewResolver htmlViewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(templateEngine(htmlTemplateResolver()));
+        resolver.setContentType("text/html");
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setViewNames(new String[]{"*.html"});
+        return resolver;
+    }
+
+    private ISpringTemplateEngine templateEngine(ITemplateResolver templateResolver) {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(templateResolver);
+        return engine;
+    }
+
+    private ITemplateResolver htmlTemplateResolver() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setApplicationContext(applicationContext);
+        resolver.setPrefix("/WEB-INF/views/html/");
+        resolver.setCacheable(false);
+        resolver.setTemplateMode(TemplateMode.HTML);
+        return resolver;
     }
 
 }

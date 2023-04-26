@@ -26,4 +26,12 @@ public class MvcJDBC {
         return "list.jsp";
     }
 
+    @RequestMapping(value = "/list2")
+    public String getTable2(Model model) {
+        // logger.info("Start getAllEmployees.");
+        List<Person> people = personDao.getPeople() ;
+        model.addAttribute("table",people);
+        return "list.html";
+    }
+
 }
